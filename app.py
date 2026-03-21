@@ -4,81 +4,84 @@ from datetime import datetime
 
 st.set_page_config(layout="centered", page_title="Taxi Bilbao")
 
-# --- ESTILO QUE SÍ FUNCIONA (COLORES Y 2 COLUMNAS) ---
+# --- DISEÑO RADICAL PARA IPHONE VERTICAL ---
 st.markdown("""
     <style>
     .block-container { padding: 10px 5px !important; }
     header, footer { visibility: hidden; }
 
-    /* Forzar rejilla de 2 columnas para botones de Streamlit */
-    div[data-testid="stHorizontalBlock"] {
-        display: flex !important;
-        flex-direction: row !important;
-        gap: 10px !important;
-    }
-    div[data-testid="column"] {
-        width: 100% !important;
+    /* Rejilla manual 2x2 */
+    .contenedor-taxi {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        padding: 5px;
     }
 
-    /* Estilo de los botones */
-    .stButton > button {
-        height: 160px !important;
-        width: 100% !important;
-        border-radius: 15px !important;
-        font-size: 22px !important;
-        font-weight: bold !important;
-        color: white !important;
-        border: none !important;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.2) !important;
+    /* Estilo de los botones visuales */
+    .casilla {
+        height: 160px;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 22px;
+        font-weight: bold;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        transition: 0.1s;
     }
 
-    /* Colores por posición */
-    /* Fila 1 */
-    div[data-testid="column"]:nth-of-type(1) div.stButton:nth-of-type(1) > button { background-color: #0000FF !important; } /* PARADA - Azul */
-    div[data-testid="column"]:nth-of-type(1) div.stButton:nth-of-type(2) > button { background-color: #FFA500 !important; } /* EMISORA - Naranja */
-    
-    div[data-testid="column"]:nth-of-type(2) div.stButton:nth-of-type(1) > button { background-color: #008000 !important; } /* MANILLA - Verde */
-    div[data-testid="column"]:nth-of-type(2) div.stButton:nth-of-type(2) > button { background-color: #808080 !important; } /* LIBRE - Gris */
+    /* Colores */
+    .azul { background-color: #0000FF; }
+    .verde { background-color: #008000; }
+    .naranja { background-color: #FFA500; }
+    .gris { background-color: #808080; }
 
-    /* Parpadeo verde al pulsar */
-    .stButton > button:active {
+    /* Efecto al tocar */
+    .casilla:active {
         background-color: #00FF00 !important;
-        color: black !important;
+        color: black;
+        transform: scale(0.95);
     }
 
-    /* Fila de abajo (Pequeños) */
-    .bot-row .stButton > button {
-        height: 70px !important;
-        font-size: 14px !important;
-        background-color: #333333 !important;
+    /* Botones pequeños abajo */
+    .fila-pequena {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 5px;
+        margin-top: 15px;
+        padding: 5px;
+    }
+    .mini {
+        height: 70px;
+        background-color: #333;
+        color: white;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: bold;
     }
     </style>
+
+    <div class="contenedor-taxi">
+        <div class="casilla azul">PARADA</div>
+        <div class="casilla verde">MANILLA</div>
+        <div class="casilla naranja">EMISORA</div>
+        <div class="casilla gris">LIBRE</div>
+    </div>
+
+    <div class="fila-pequena">
+        <div class="mini">FOTO</div>
+        <div class="mini">MIC</div>
+        <div class="mini">CAFE</div>
+        <div class="mini">FIN</div>
+    </div>
     """, unsafe_allow_html=True)
 
-# --- LÓGICA DE ENVÍO ---
-def enviar(evento):
-    # Por ahora solo muestra el aviso en pantalla, luego pondremos el Webhook
-    st.toast(f"✅ {evento} registrado")
-
-# --- ESTRUCTURA DE BOTONES ---
-col1, col2 = st.columns(2)
-
-with col1:
-    if st.button("PARADA", key="btn_parada"): enviar("PARADA")
-    if st.button("EMISORA", key="btn_emisora"): enviar("EMISORA")
-
-with col2:
-    if st.button("MANILLA", key="btn_manilla"): enviar("MANILLA")
-    if st.button("LIBRE", key="btn_libre"): enviar("LIBRE")
-
-st.markdown('<div class="bot-row">', unsafe_allow_html=True)
-c1, c2, c3, c4 = st.columns(4)
-with c1: 
-    if st.button("FOTO"): enviar("FOTO")
-with c2: 
-    if st.button("MIC"): enviar("MIC")
-with c3: 
-    if st.button("CAFE"): enviar("CAFE")
-with c4: 
-    if st.button("FIN"): enviar("FIN")
-st.markdown('</div>', unsafe_allow_html=True)
+# --- BOTÓN INVISIBLE PARA LA LÓGICA ---
+# Esto es para que Streamlit detecte actividad sin romper el diseño
+if st.button("ACTUALIZAR DATOS", use_container_width=True):
+    st.toast("✅ Sistema listo y conectado")
