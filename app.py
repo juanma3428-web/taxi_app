@@ -1,4 +1,6 @@
 import streamlit as st
+import requests
+
 
 # Estilo y Botonera Original (Punto de restauración seguro)
 botonera_html = """
