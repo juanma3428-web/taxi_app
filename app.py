@@ -67,63 +67,31 @@ if "button" in query_params:
     boton_pulsado = query_params["button"]
     st.info(f"Registrando: {boton_pulsado}...")
     # Aquí va tu link de Make que ya funcionaba
-# --- ZONA DE PRUEBAS SEGURA (Debajo de tu botonera) ---
-st.divider() # Esto crea una línea de separación visual
-
-# Creamos un interruptor para que la cámara no esté siempre encendida
-if st.checkbox("📷 Abrir Cámara para Informe"):
-    foto = st.camera_input("Haz una foto de la parada o incidencia")
-    
-    if foto:
-        # Aquí es donde Make recibirá la imagen
-        st.success("Foto capturada. ¿Quieres enviarla?")
-        if st.button("Confirmar Envío"):
-            # Aquí pondremos el enlace a tu Webhook de Make
-            st.write("Enviando a Google Sheets...")
-# --- LÍNEA 83: COMIENZA EL BLOQUE DE SEGURIDAD PARA LA FOTO ---
+# --- LÍNEA 70: CONEXIÓN REAL CON MAKE (FOTO) ---
 st.divider()
 
 if st.checkbox("📷 Activar Cámara para el Informe"):
     foto = st.camera_input("Captura de parada o incidencia")
     
     if foto:
-        if st.button("🚀 ENVIAR FOTO A GOOGLE SHEETS"):
-            bytes_data = foto.getvalue()
-            # Sustituye las X por tu enlace de Make:
-            url_webhook = "https://hook.us1.make.com/XXXXXXXXXXXX"
-            
+        if st.button("🚀 ENVIAR AHORA"):
             try:
-                res = requests.post(url_webhook, files={"file": bytes_data})
-                if res.status_code == 200:
-                    st.success("✅ Foto registrada en el Excel.")
-                else:
-                    st.error("❌ Error al subir la imagen.")
-            except:
-                st.error("⚠️ Error de conexión.")
-# --- FIN DEL BLOQUE ---
-# --- LÍNEA 104: MOTOR DE ENVÍO DE FOTO ---
-st.divider()
-
-if st.checkbox("📷 Activar Cámara para el Informe"):
-    foto = st.camera_input("Captura de parada o incidencia")
-    
-    if foto:
-        if st.button("🚀 ENVIAR AHORA A GOOGLE SHEETS"):
-            try:
-                # Convertimos la imagen a bytes
+                # 1. Preparar la imagen
                 bytes_data = foto.getvalue()
                 
-                # Tu URL de Make (Servidor EU1)
+                # 2. Tu URL de Webhook de Make (Servidor EU1)
+                # IMPORTANTE: Esta URL es la que recibe los datos en tu escenario
                 url_webhook = "https://hook.eu1.make.com/zBmH53wgdaq"
                 
-                # Enviamos el archivo
+                # 3. Enviar el archivo
                 res = requests.post(url_webhook, files={"archivo": bytes_data})
                 
                 if res.status_code == 200:
                     st.success("✅ ¡Recibido! Foto registrada en el sistema.")
                 else:
-                    st.error(f"❌ Error {res.status_code}: Revisa el escenario en Make.")
+                    st.error(f"❌ Error {res.status_code}: Revisa si el escenario en Make está 'ON'.")
             except Exception as e:
-                st.error(f"⚠️ Error: Asegúrate de tener 'import requests' al principio del archivo.")
+                st.error("⚠️ Error: Asegúrate de tener 'import requests' en la Línea 1.")
 
-# --- FIN DEL MOTOR DE ENVÍO ---
+# --- FIN DEL BLOQUE ---
+
