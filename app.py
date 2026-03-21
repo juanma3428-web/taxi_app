@@ -75,13 +75,7 @@ st.markdown("""
     </div>
 
     <div class="grid-small">
-        # En lugar de <a href="/?button=FOTO">...
-foto_capturada = st.camera_input("Hacer foto para el informe")
-
-if foto_capturada:
-    # Aquí la lógica para enviar la imagen a Make/Google Drive
-    st.success("Foto lista para enviar")
-
+       ‹a href="/?button=FOTO" class="btn-s">FOTO</
         <a href="/?button=MIC" class="btn-s">MIC</a>
         <a href="/?button=CAFE" class="btn-s">CAFE</a>
         <a href="/?button=FIN" class="btn-s">FIN</a>
