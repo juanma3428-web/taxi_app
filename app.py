@@ -1,6 +1,11 @@
 import streamlit as st
+import requests
+from datetime import datetime
 
 st.set_page_config(layout="centered", page_title="Panel Taxi")
+
+# --- PEGA TU URL DE MAKE AQUÍ ENTRE LAS COMILLAS ---
+URL_MAKE = "https://hook.eu1.make.com/jgvj7anrmyxyu621vmpueo814k8wa1ue"
 
 # Diseño blindado para iPhone (Recuperando el estilo de las 19:35)
 st.markdown("""
@@ -8,7 +13,6 @@ st.markdown("""
     .block-container { padding: 10px 5px !important; }
     header, footer { visibility: hidden; }
 
-    /* Forzar rejilla de 2 columnas que no se rompa en vertical */
     .grid-taxi {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -16,7 +20,6 @@ st.markdown("""
         padding: 5px;
     }
 
-    /* Estilo de los botones grandes */
     .btn {
         height: 150px;
         border-radius: 15px;
@@ -32,20 +35,17 @@ st.markdown("""
         transition: 0.1s;
     }
 
-    /* Colores exactos de tu captura buena */
     .azul { background-color: #0000FF; }
     .verde { background-color: #38761d; }
     .naranja { background-color: #f6b26b; }
     .gris { background-color: #7f7f7f; }
 
-    /* Efecto al tocar */
     .btn:active {
         background-color: #00FF00 !important;
         color: black;
         transform: scale(0.95);
     }
 
-    /* Rejilla de botones auxiliares abajo */
     .grid-small {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
@@ -82,10 +82,17 @@ st.markdown("""
     </div>
     """, unsafe_allow_html=True)
 
-# Lógica para registrar los clics sin usar botones nativos que rompan el CSS
+# Lógica para enviar datos a Make
 query_params = st.query_params
 if "button" in query_params:
     boton_pulsado = query_params["button"]
-    st.toast(f"✅ {boton_pulsado} registrado")
-    # Limpiamos para el siguiente toque
+    ahora = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    
+    # Enviar al Webhook de Make
+    try:
+        requests.post(URL_MAKE, json={"evento": boton_pulsado, "fecha_hora": ahora}, timeout=2)
+        st.toast(f"✅ {boton_pulsado} enviado a Make")
+    except:
+        st.toast(f"⚠️ Error al enviar {boton_pulsado}")
+    
     st.query_params.clear()
