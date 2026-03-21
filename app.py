@@ -1,50 +1,57 @@
 import streamlit as st
 
+# Configuración para evitar márgenes innecesarios
 st.set_page_config(layout="centered", page_title="Taxi Bilbao")
 
-# CSS para forzar el diseño de 2 columnas en iPhone y los colores
+# CSS "AGRESIVO" para iPhone Vertical
 st.markdown("""
     <style>
-    .block-container { padding: 10px 5px !important; }
+    /* Eliminar todo el espacio sobrante de Streamlit */
+    .block-container { padding: 5px !important; }
     header, footer { visibility: hidden; }
-
-    /* Forzar 2 columnas en móvil */
-    [data-testid="column"] {
-        width: 49% !important;
-        flex: 1 1 49% !important;
-        min-width: 49% !important;
+    
+    /* FORZAR 2 COLUMNAS EN MÓVIL (Vertical) */
+    div[data-testid="stHorizontalBlock"] {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        gap: 10px !important;
+    }
+    div[data-testid="column"] {
+        flex: 1 !important;
+        width: 48% !important;
+        min-width: 48% !important;
     }
 
-    /* Estilo de los botones */
+    /* ESTILO DE LOS BOTONES */
     .stButton > button {
         height: 160px !important;
         width: 100% !important;
         border-radius: 15px !important;
-        font-size: 22px !important;
+        font-size: 20px !important;
         font-weight: bold !important;
         color: white !important;
         border: none !important;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.2) !important;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.3) !important;
     }
 
-    /* Colores por botón individual */
-    /* PARADA */
-    div[data-testid="column"]:nth-of-type(1) div.stButton:nth-of-type(1) > button { background-color: #0000FF !important; }
-    /* EMISORA */
-    div[data-testid="column"]:nth-of-type(1) div.stButton:nth-of-type(2) > button { background-color: #FFA500 !important; }
-    /* MANILLA */
-    div[data-testid="column"]:nth-of-type(2) div.stButton:nth-of-type(1) > button { background-color: #008000 !important; }
-    /* LIBRE */
-    div[data-testid="column"]:nth-of-type(2) div.stButton:nth-of-type(2) > button { background-color: #808080 !important; }
+    /* ASIGNACIÓN DE COLORES POR ORDEN REAL */
+    /* Columna Izquierda */
+    div[data-testid="column"]:nth-of-type(1) div.stButton:nth-of-type(1) > button { background-color: #0000FF !important; } /* PARADA */
+    div[data-testid="column"]:nth-of-type(1) div.stButton:nth-of-type(2) > button { background-color: #FFA500 !important; } /* EMISORA */
 
-    /* Botones pequeños de abajo */
-    .small-btn .stButton > button {
-        height: 75px !important;
+    /* Columna Derecha */
+    div[data-testid="column"]:nth-of-type(2) div.stButton:nth-of-type(1) > button { background-color: #008000 !important; } /* MANILLA */
+    div[data-testid="column"]:nth-of-type(2) div.stButton:nth-of-type(2) > button { background-color: #808080 !important; } /* LIBRE */
+
+    /* BOTONES PEQUEÑOS INFERIORES */
+    .bot-row .stButton > button {
+        height: 70px !important;
         background-color: #333333 !important;
-        font-size: 14px !important;
+        font-size: 13px !important;
     }
 
-    /* El parpadeo verde al pulsar */
+    /* EFECTO FLASH VERDE AL PULSAR */
     .stButton > button:active {
         background-color: #00FF00 !important;
         color: black !important;
@@ -52,28 +59,25 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-def registrar(nombre):
+# Lógica de aviso
+def click(nombre):
     st.toast(f"✅ {nombre} registrado")
 
-# --- CUERPO DE LA APP ---
+# --- CONSTRUCCIÓN DE LA REJILLA ---
 col1, col2 = st.columns(2)
 
 with col1:
-    if st.button("PARADA"): registrar("PARADA")
-    if st.button("EMISORA"): registrar("EMISORA")
+    st.button("PARADA", on_click=click, args=("PARADA",))
+    st.button("EMISORA", on_click=click, args=("EMISORA",))
 
 with col2:
-    if st.button("MANILLA"): registrar("MANILLA")
-    if st.button("LIBRE"): registrar("LIBRE")
+    st.button("MANILLA", on_click=click, args=("MANILLA",))
+    st.button("LIBRE", on_click=click, args=("LIBRE",))
 
-st.markdown('<div class="small-btn">', unsafe_allow_html=True)
+st.markdown('<div class="bot-row">', unsafe_allow_html=True)
 c1, c2, c3, c4 = st.columns(4)
-with c1: 
-    if st.button("FOTO"): registrar("FOTO")
-with c2: 
-    if st.button("MIC"): registrar("MIC")
-with c3: 
-    if st.button("CAFE"): registrar("CAFE")
-with c4: 
-    if st.button("FIN"): registrar("FIN")
+with c1: st.button("FOTO", on_click=click, args=("FOTO",))
+with c2: st.button("MIC", on_click=click, args=("MIC",))
+with c3: st.button("CAFE", on_click=click, args=("CAFE",))
+with c4: st.button("FIN", on_click=click, args=("FIN",))
 st.markdown('</div>', unsafe_allow_html=True)
