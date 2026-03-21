@@ -1,78 +1,79 @@
 import streamlit as st
-import requests
-from datetime import datetime
 
 st.set_page_config(layout="centered", page_title="Taxi Bilbao")
 
-# --- ESTILO PARA QUE LOS BOTONES REALES SEAN INVISIBLES Y SE AJUSTEN AL DISEÑO ---
+# CSS para forzar el diseño de 2 columnas en iPhone y los colores
 st.markdown("""
     <style>
     .block-container { padding: 10px 5px !important; }
     header, footer { visibility: hidden; }
 
-    /* Contenedor de la rejilla visual */
-    .contenedor-visual {
-        display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 5px;
-        position: absolute; width: 100%; z-index: 1;
+    /* Forzar 2 columnas en móvil */
+    [data-testid="column"] {
+        width: 49% !important;
+        flex: 1 1 49% !important;
+        min-width: 49% !important;
     }
-    .casilla {
-        height: 160px; border-radius: 15px; display: flex; align-items: center;
-        justify-content: center; color: white; font-size: 22px; font-weight: bold;
-    }
-    .azul { background-color: #0000FF; } .verde { background-color: #008000; }
-    .naranja { background-color: #FFA500; } .gris { background-color: #808080; }
 
-    /* Hacer que los botones de Streamlit sean transparentes y cubran el dibujo */
+    /* Estilo de los botones */
     .stButton > button {
         height: 160px !important;
-        background: transparent !important;
-        color: transparent !important;
+        width: 100% !important;
+        border-radius: 15px !important;
+        font-size: 22px !important;
+        font-weight: bold !important;
+        color: white !important;
         border: none !important;
-        z-index: 2;
-        position: relative;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.2) !important;
     }
-    
-    /* Para los botones pequeños de abajo */
-    .fila-pequena-visual {
-        display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin-top: 10px;
-    }
-    .mini {
-        height: 70px; background-color: #333; color: white; border-radius: 10px;
-        display: flex; align-items: center; justify-content: center; font-size: 12px;
-    }
-    .small-btns .stButton > button { height: 70px !important; }
-    </style>
 
-    <div class="contenedor-visual">
-        <div class="casilla azul">PARADA</div>
-        <div class="casilla verde">MANILLA</div>
-        <div class="casilla naranja">EMISORA</div>
-        <div class="casilla gris">LIBRE</div>
-    </div>
+    /* Colores por botón individual */
+    /* PARADA */
+    div[data-testid="column"]:nth-of-type(1) div.stButton:nth-of-type(1) > button { background-color: #0000FF !important; }
+    /* EMISORA */
+    div[data-testid="column"]:nth-of-type(1) div.stButton:nth-of-type(2) > button { background-color: #FFA500 !important; }
+    /* MANILLA */
+    div[data-testid="column"]:nth-of-type(2) div.stButton:nth-of-type(1) > button { background-color: #008000 !important; }
+    /* LIBRE */
+    div[data-testid="column"]:nth-of-type(2) div.stButton:nth-of-type(2) > button { background-color: #808080 !important; }
+
+    /* Botones pequeños de abajo */
+    .small-btn .stButton > button {
+        height: 75px !important;
+        background-color: #333333 !important;
+        font-size: 14px !important;
+    }
+
+    /* El parpadeo verde al pulsar */
+    .stButton > button:active {
+        background-color: #00FF00 !important;
+        color: black !important;
+    }
+    </style>
     """, unsafe_allow_html=True)
 
-# --- BOTONES REALES (LOGICA) ---
-def registrar(evento):
-    st.toast(f"✅ {evento} enviado correctamente")
+def registrar(nombre):
+    st.toast(f"✅ {nombre} registrado")
 
+# --- CUERPO DE LA APP ---
 col1, col2 = st.columns(2)
+
 with col1:
-    if st.button("P", key="p"): registrar("PARADA")
-    if st.button("E", key="e"): registrar("EMISORA")
+    if st.button("PARADA"): registrar("PARADA")
+    if st.button("EMISORA"): registrar("EMISORA")
+
 with col2:
-    if st.button("M", key="m"): registrar("MANILLA")
-    if st.button("L", key="l"): registrar("LIBRE")
+    if st.button("MANILLA"): registrar("MANILLA")
+    if st.button("LIBRE"): registrar("LIBRE")
 
-st.markdown('<div class="fila-pequena-visual"><div class="mini">FOTO</div><div class="mini">MIC</div><div class="mini">CAFE</div><div class="mini">FIN</div></div>', unsafe_allow_html=True)
-
-st.markdown('<div class="small-btns">', unsafe_allow_html=True)
+st.markdown('<div class="small-btn">', unsafe_allow_html=True)
 c1, c2, c3, c4 = st.columns(4)
 with c1: 
-    if st.button("F"): registrar("FOTO")
+    if st.button("FOTO"): registrar("FOTO")
 with c2: 
-    if st.button("MI"): registrar("MIC")
+    if st.button("MIC"): registrar("MIC")
 with c3: 
-    if st.button("C"): registrar("CAFE")
+    if st.button("CAFE"): registrar("CAFE")
 with c4: 
-    if st.button("FI"): registrar("FIN")
+    if st.button("FIN"): registrar("FIN")
 st.markdown('</div>', unsafe_allow_html=True)
