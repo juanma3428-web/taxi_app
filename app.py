@@ -1,68 +1,85 @@
 import streamlit as st
 
-st.set_page_config(layout="centered", page_title="Panel Trabajo")
+st.set_page_config(layout="centered", page_title="Taxi Bilbao")
 
-# Estilo para forzar 2 columnas en el móvil y colores originales
+# CSS Inyectado para control total del diseño vertical en iPhone
 st.markdown("""
     <style>
-    /* Forzar que las columnas no se apilen en el móvil */
-    [data-testid="column"] {
-        width: 48% !important;
-        flex: 1 1 45% !important;
-        min-width: 45% !important;
-    }
-    
-    /* Estilo general de los botones */
-    .stButton > button {
-        height: 140px !important;
-        width: 100% !important;
-        font-size: 22px !important;
-        font-weight: bold !important;
-        color: white !important;
-        border-radius: 15px !important;
-        margin-bottom: 10px !important;
-        border: none !important;
+    /* Eliminar márgenes de Streamlit para ganar espacio */
+    .block-container { padding: 10px 5px !important; }
+    header { visibility: hidden; }
+    footer { visibility: hidden; }
+
+    /* Contenedor principal para botones de acción */
+    .main-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-top: 10px;
     }
 
-    /* Colores Específicos */
-    /* Fila 1 */
-    div.stButton:nth-child(1) button { background-color: #0000FF !important; } /* PARADA - Azul */
-    div.stButton:nth-child(2) button { background-color: #008000 !important; } /* MANILLA - Verde */
-    
-    /* Fila 2 */
-    div.stButton:nth-child(3) button { background-color: #FFA500 !important; } /* EMISORA - Naranja */
-    div.stButton:nth-child(4) button { background-color: #808080 !important; } /* LIBRE - Gris */
-
-    /* Botones pequeños de abajo */
-    .bot-row .stButton > button {
-        height: 60px !important;
-        font-size: 14px !important;
-        background-color: #333333 !important;
+    /* Estilo de los botones grandes (2x2) */
+    .btn-big {
+        height: 160px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-family: sans-serif;
+        font-size: 20px;
+        font-weight: bold;
+        text-align: center;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        cursor: pointer;
+        user-select: none;
     }
 
-    /* Efecto parpadeo verde al pulsar */
-    .stButton > button:active {
+    /* Colores específicos */
+    .azul { background-color: #0000FF; }
+    .verde { background-color: #008000; }
+    .naranja { background-color: #FFA500; }
+    .gris { background-color: #808080; }
+
+    /* Efecto parpadeo verde intenso al tocar */
+    .btn-big:active, .btn-small:active {
         background-color: #00FF00 !important;
         color: black !important;
+        transform: scale(0.98);
+    }
+
+    /* Contenedor inferior (4 botones en línea) */
+    .small-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 5px;
+        margin-top: 15px;
+    }
+
+    .btn-small {
+        height: 70px;
+        background-color: #333333;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 13px;
+        font-weight: bold;
     }
     </style>
+
+    <div class="main-grid">
+        <div class="btn-big azul">PARADA</div>
+        <div class="btn-big verde">MANILLA</div>
+        <div class="btn-big naranja">EMISORA</div>
+        <div class="btn-big gris">LIBRE</div>
+    </div>
+
+    <div class="small-grid">
+        <div class="btn-small">FOTO</div>
+        <div class="btn-small">MIC</div>
+        <div class="btn-small">CAFE</div>
+        <div class="btn-small">FIN</div>
+    </div>
     """, unsafe_allow_html=True)
-
-# Diseño de los botones grandes
-col1, col2 = st.columns(2)
-with col1:
-    st.button("PARADA")
-    st.button("EMISORA")
-
-with col2:
-    st.button("MANILLA")
-    st.button("LIBRE")
-
-st.markdown('<div class="bot-row">', unsafe_allow_html=True)
-# Diseño de los botones pequeños en una fila
-c1, c2, c3, c4 = st.columns(4)
-with c1: st.button("FOTO")
-with c2: st.button("MIC")
-with c3: st.button("CAFE")
-with c4: st.button("FIN")
-st.markdown('</div>', unsafe_allow_html=True)
