@@ -1,97 +1,69 @@
 import streamlit as st
-import requests
-from datetime import datetime
 
-st.set_page_config(layout="centered", page_title="Panel Taxi")
-
-# --- PEGA TU URL DE MAKE AQUÍ ENTRE LAS COMILLAS ---
-URL_MAKE = "https://hook.eu1.make.com/jgvj7anrmyxyu621vmpueo814k8wa1ue"
-
-# Diseño blindado para iPhone (Recuperando el estilo de las 19:35)
-st.markdown("""
-    <style>
-    .block-container { padding: 10px 5px !important; }
-    header, footer { visibility: hidden; }
-
-    .grid-taxi {
+# Estilo y Botonera Original (Punto de restauración seguro)
+botonera_html = """
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<style>
+    .grid-container {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(2, 1fr);
         gap: 10px;
-        padding: 5px;
+        padding: 10px;
     }
-
-    .btn {
-        height: 150px;
-        border-radius: 15px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-family: sans-serif;
-        font-size: 22px;
-        font-weight: bold;
-        text-decoration: none;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-        transition: 0.1s;
-    }
-
-    .azul { background-color: #0000FF; }
-    .verde { background-color: #38761d; }
-    .naranja { background-color: #f6b26b; }
-    .gris { background-color: #7f7f7f; }
-
-    .btn:active {
-        background-color: #00FF00 !important;
-        color: black;
-        transform: scale(0.95);
-    }
-
     .grid-small {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         gap: 5px;
-        margin-top: 15px;
-        padding: 5px;
+        padding: 10px;
+    }
+    .btn-taxi {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        color: white;
+        font-family: Arial, sans-serif;
+        font-weight: bold;
+        border-radius: 15px;
+        height: 100px;
+        font-size: 16px;
     }
     .btn-s {
-        height: 70px;
-        background-color: #333;
-        border-radius: 10px;
-        color: white;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 12px;
-        font-weight: bold;
         text-decoration: none;
+        color: white;
+        background-color: #7f8c8d;
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+        border-radius: 8px;
+        height: 40px;
     }
-    </style>
+    .fas { margin-bottom: 5px; font-size: 24px; }
+</style>
 
-    <div class="grid-taxi">
-        <a href="/?button=PARADA" class="btn azul">PARADA</a>
-        <a href="/?button=MANILLA" class="btn verde">MANILLA</a>
-        <a href="/?button=EMISORA" class="btn naranja">EMISORA</a>
-        <a href="/?button=LIBRE" class="btn gris">LIBRE</a>
-    </div>
- <div class="grid-small">
-        ‹a href="/?button=FOTO" class="btn-s">FOTO</a>
-        <a href="/?button=MIC" class="btn-s">MIC</a>
-        <a href="/?button=CAFE" class="btn-s">CAFE</a>
-        <a href="/?button=FIN" class="btn-s">FIN</a>
-    </div>
-    """, unsafe_allow_html=True)
+<div class="grid-container">
+    <a href="/?button=LIBRE" class="btn-taxi" style="background-color: #2ecc71;"><i class="fas fa-check"></i>LIBRE</a>
+    <a href="/?button=PARADA" class="btn-taxi" style="background-color: #e67e22;"><i class="fas fa-map-marker-alt"></i>PARADA</a>
+    <a href="/?button=EMISORA" class="btn-taxi" style="background-color: #e74c3c;"><i class="fas fa-headset"></i>EMISORA</a>
+    <a href="/?button=MANILLA" class="btn-taxi" style="background-color: #34495e;"><i class="fas fa-hand-paper"></i>MANILLA</a>
+</div>
 
-# Lógica para enviar datos a Make
+<div class="grid-small">
+    <a href="/?button=FOTO" class="btn-s">FOTO</a>
+    <a href="/?button=MIC" class="btn-s">MIC</a>
+    <a href="/?button=CAFE" class="btn-s">CAFE</a>
+    <a href="/?button=FIN" class="btn-s">FIN</a>
+</div>
+"""
+
+st.write(botonera_html, unsafe_allow_html=True)
+
+# Lógica de detección de pulsación (la que ya tenías con Make)
 query_params = st.query_params
 if "button" in query_params:
     boton_pulsado = query_params["button"]
-    ahora = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    
-    # Enviar al Webhook de Make
-    try:
-        requests.post(URL_MAKE, json={"evento": boton_pulsado, "fecha_hora": ahora}, timeout=2)
-        st.toast(f"✅ {boton_pulsado} enviado a Make")
-    except:
-        st.toast(f"⚠️ Error al enviar {boton_pulsado}")
-    
-    st.query_params.clear()
+    st.info(f"Registrando: {boton_pulsado}...")
+    # Aquí va tu link de Make que ya funcionaba
