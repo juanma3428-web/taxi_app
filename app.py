@@ -75,7 +75,7 @@ st.markdown("""
     </div>
 
     <div class="grid-small">
-       ‹a href="/?button=FOTO" class="btn-s">FOTO</
+        ‹a href="/?button=FOTO" class="btn-s">FOTO</
         <a href="/?button=MIC" class="btn-s">MIC</a>
         <a href="/?button=CAFE" class="btn-s">CAFE</a>
         <a href="/?button=FIN" class="btn-s">FIN</a>
