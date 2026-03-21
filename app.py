@@ -73,8 +73,7 @@ st.markdown("""
         <a href="/?button=EMISORA" class="btn naranja">EMISORA</a>
         <a href="/?button=LIBRE" class="btn gris">LIBRE</a>
     </div>
-
-    <div class="grid-small">
+ <div class="grid-small">
         ‹a href="/?button=FOTO" class="btn-s">FOTO</a>
         <a href="/?button=MIC" class="btn-s">MIC</a>
         <a href="/?button=CAFE" class="btn-s">CAFE</a>
