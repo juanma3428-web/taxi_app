@@ -1,25 +1,46 @@
 import streamlit as st
 
-# Configuración de página
-st.set_page_config(layout="centered", page_title="Trabajo")
+st.set_page_config(layout="centered", page_title="Panel Trabajo")
 
-# Estilo forzado para que se vea bien en iPhone
+# Estilo para forzar 2 columnas en el móvil y colores originales
 st.markdown("""
     <style>
+    /* Forzar que las columnas no se apilen en el móvil */
+    [data-testid="column"] {
+        width: 48% !important;
+        flex: 1 1 45% !important;
+        min-width: 45% !important;
+    }
+    
+    /* Estilo general de los botones */
     .stButton > button {
-        height: 120px !important;
+        height: 140px !important;
         width: 100% !important;
-        font-size: 25px !important;
+        font-size: 22px !important;
         font-weight: bold !important;
         color: white !important;
         border-radius: 15px !important;
         margin-bottom: 10px !important;
+        border: none !important;
     }
-    /* Colores fijos */
-    div.stButton:nth-of-type(1) > button { background-color: #0047AB !important; } /* Azul */
-    div.stButton:nth-of-type(2) > button { background-color: #2E7D32 !important; } /* Verde */
+
+    /* Colores Específicos */
+    /* Fila 1 */
+    div.stButton:nth-child(1) button { background-color: #0000FF !important; } /* PARADA - Azul */
+    div.stButton:nth-child(2) button { background-color: #008000 !important; } /* MANILLA - Verde */
     
-    /* Efecto parpadeo al tocar */
+    /* Fila 2 */
+    div.stButton:nth-child(3) button { background-color: #FFA500 !important; } /* EMISORA - Naranja */
+    div.stButton:nth-child(4) button { background-color: #808080 !important; } /* LIBRE - Gris */
+
+    /* Botones pequeños de abajo */
+    .bot-row .stButton > button {
+        height: 60px !important;
+        font-size: 14px !important;
+        background-color: #333333 !important;
+    }
+
+    /* Efecto parpadeo verde al pulsar */
     .stButton > button:active {
         background-color: #00FF00 !important;
         color: black !important;
@@ -27,28 +48,21 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-st.title("Panel de Trabajo")
-
-# Botones Grandes
+# Diseño de los botones grandes
 col1, col2 = st.columns(2)
-
 with col1:
-    if st.button("PARADA"):
-        st.toast("Registrando PARADA...")
-    if st.button("EMISORA"):
-        st.toast("Registrando EMISORA...")
+    st.button("PARADA")
+    st.button("EMISORA")
 
 with col2:
-    if st.button("MANILLA"):
-        st.toast("Registrando MANILLA...")
-    if st.button("LIBRE"):
-        st.toast("Registrando LIBRE...")
+    st.button("MANILLA")
+    st.button("LIBRE")
 
-st.divider()
-
-# Botones Pequeños
+st.markdown('<div class="bot-row">', unsafe_allow_html=True)
+# Diseño de los botones pequeños en una fila
 c1, c2, c3, c4 = st.columns(4)
 with c1: st.button("FOTO")
 with c2: st.button("MIC")
 with c3: st.button("CAFE")
 with c4: st.button("FIN")
+st.markdown('</div>', unsafe_allow_html=True)
