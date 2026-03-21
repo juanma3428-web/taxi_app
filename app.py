@@ -53,12 +53,11 @@ botonera_html = """
     <a href="/?button=MANILLA" class="btn-taxi" style="background-color: #34495e;"><i class="fas fa-hand-paper"></i>MANILLA</a>
 </div>
 
-<div class="grid-small">
-    <a href="/?button=FOTO" class="btn-s">FOTO</a>
-    <a href="/?button=MIC" class="btn-s">MIC</a>
-    <a href="/?button=CAFE" class="btn-s">CAFE</a>
-    <a href="/?button=FIN" class="btn-s">FIN</a>
+<div style="display: flex; justify-content: center; gap: 10px;">
+  <button class="grey-button">CAFE</button>
+  <button class="grey-button">FIN</button>
 </div>
+
 """
 
 st.write(botonera_html, unsafe_allow_html=True)
