@@ -1,21 +1,14 @@
 import streamlit as st
 import requests
 
-
-# Estilo y Botonera Original (Punto de restauración seguro)
-botonera_html = """
+# 1. Configuración de Estilo (Diseño de la botonera superior)
+st.markdown("""
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <style>
     .grid-container {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         gap: 10px;
-        padding: 10px;
-    }
-    .grid-small {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 5px;
         padding: 10px;
     }
     .btn-taxi {
@@ -31,19 +24,13 @@ botonera_html = """
         height: 100px;
         font-size: 16px;
     }
-    .btn-s {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-decoration: none;
-        color: white;
-        background-color: #7f8c8d;
-        font-family: Arial, sans-serif;
-        font-size: 12px;
-        border-radius: 8px;
-        height: 40px;
-    }
     .fas { margin-bottom: 5px; font-size: 24px; }
+    /* Estilo para los botones de Streamlit para que se vean mejor */
+    .stButton>button {
+        border-radius: 10px;
+        height: 50px;
+        font-weight: bold;
+    }
 </style>
 
 <div class="grid-container">
@@ -52,38 +39,44 @@ botonera_html = """
     <a href="/?button=EMISORA" class="btn-taxi" style="background-color: #e74c3c;"><i class="fas fa-headset"></i>EMISORA</a>
     <a href="/?button=MANILLA" class="btn-taxi" style="background-color: #34495e;"><i class="fas fa-hand-paper"></i>MANILLA</a>
 </div>
+""", unsafe_allow_html=True)
 
-import requests
-
-import requests
-
-# Conexión directa con tu Telegram
+# 2. URL de tu Webhook de Make
 URL_MAKE = "https://hook.eu1.make.com/jgvj7anrmyxyu621vmpueo814k8wa1ue"
 
-# Fila de botones centrados
-col_cafe, col_fin = st.columns(2)
-
-with col_cafe:
-    if st.button("☕️ CAFE"):
-        requests.post(URL_MAKE, json={"evento": "CAFE", "msg": "Inicio de descanso"})
-        st.toast("Aviso de café enviado")
-
-with col_fin:
-    if st.button("🏁 FIN"):
-        requests.post(URL_MAKE, json={"evento": "FIN", "msg": "Fin de jornada"})
-        st.toast("Turno finalizado")
-
-st.write(botonera_html, unsafe_allow_html=True)
-
-# Lógica de detección de pulsación (la que ya tenías con Make)
+# 3. Lógica para los botones de colores (LIBRE, PARADA, etc.)
 query_params = st.query_params
 if "button" in query_params:
     boton_pulsado = query_params["button"]
-    st.info(f"Registrando: {boton_pulsado}...")
-    # Aquí va tu link de Make que ya funcionaba
-# --- LÍNEA 70: CÓDIGO ACTUALIZADO PARA EVITAR ERRORES DE DRIVE ---
+    try:
+        requests.post(URL_MAKE, json={"evento": boton_pulsado, "detalle": "Cambio de estado"})
+        st.success(f"Registrado: {boton_pulsado}")
+    except:
+        st.error("Error al registrar estado")
+
+# 4. Botones CAFE y FIN (Funcionales y centrados)
+st.write("") # Espacio visual
+col_c, col_f = st.columns(2)
+
+with col_c:
+    if st.button("☕️ CAFE", use_container_width=True):
+        try:
+            requests.post(URL_MAKE, json={"evento": "CAFE", "mensaje": "Inicio de pausa café"})
+            st.toast("Aviso de CAFÉ enviado ✅")
+        except:
+            st.error("Error al enviar")
+
+with col_f:
+    if st.button("🏁 FIN", use_container_width=True):
+        try:
+            requests.post(URL_MAKE, json={"evento": "FIN", "mensaje": "Fin de jornada"})
+            st.toast("Aviso de FIN enviado ✅")
+        except:
+            st.error("Error al enviar")
+
 st.divider()
 
+# 5. Sistema de Cámara y Micro (Tu código original intacto)
 col1, col2 = st.columns(2)
 
 with col1:
@@ -92,8 +85,7 @@ with col1:
         if foto:
             if st.button("🚀 ENVIAR FOTO"):
                 try:
-                    res = requests.post("https://hook.eu1.make.com/jgvj7anrmyxyu621vmpueo814k8wa1ue", 
-                                      files={"archivo": foto.getvalue()})
+                    res = requests.post(URL_MAKE, files={"archivo": foto.getvalue()})
                     if res.status_code == 200:
                         st.success("✅ Foto enviada")
                 except:
@@ -105,10 +97,8 @@ with col2:
         if audio:
             if st.button("🚀 ENVIAR AUDIO"):
                 try:
-                    res = requests.post("https://hook.eu1.make.com/jgvj7anrmyxyu621vmpueo814k8wa1ue", 
-                                      files={"archivo": audio.getvalue()})
+                    res = requests.post(URL_MAKE, files={"archivo": audio.getvalue()})
                     if res.status_code == 200:
                         st.success("✅ Audio enviado")
                 except:
                     st.error("⚠️ Error")
-
