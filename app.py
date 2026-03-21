@@ -69,7 +69,7 @@ if "button" in query_params:
     boton_pulsado = query_params["button"]
     st.info(f"Registrando: {boton_pulsado}...")
     # Aquí va tu link de Make que ya funcionaba
-# --- LÍNEA 70: CÓDIGO FINAL DE ENVÍO ---
+# --- LÍNEA 70: CONEXIÓN REAL Y DEFINITIVA CON MAKE ---
 st.divider()
 
 if st.checkbox("📷 Activar Cámara para el Informe"):
@@ -78,20 +78,20 @@ if st.checkbox("📷 Activar Cámara para el Informe"):
     if foto:
         if st.button("🚀 ENVIAR AHORA"):
             try:
-                # Preparamos la imagen
+                # 1. Preparar la imagen
                 bytes_data = foto.getvalue()
                 
-                # Tu URL de Webhook en Make
-                url_webhook = "https://hook.eu1.make.com/zBmH53wgdaq"
+                # 2. Tu URL de Webhook Nueva
+                url_webhook = "https://hook.eu1.make.com/jgvj7anrmyxyu621vmpueo814k8wa1ue"
                 
-                # Enviamos el archivo
+                # 3. Enviar el archivo
                 res = requests.post(url_webhook, files={"archivo": bytes_data})
                 
                 if res.status_code == 200:
-                    st.success("✅ ¡Recibido! Foto registrada en el sistema.")
+                    st.success("✅ ¡CONECTADO! Foto enviada correctamente al sistema.")
                 else:
-                    st.error(f"❌ Error {res.status_code}. Revisa si el escenario está encendido.")
-            except NameError:
-                st.error("⚠️ Error: Falta poner 'import requests' en la Línea 1 del archivo.")
+                    st.error(f"❌ Error {res.status_code}: La dirección respondió, pero hubo un problema.")
             except Exception as e:
-                st.error(f"⚠️ Error inesperado: {e}")
+                st.error("⚠️ Error: Asegúrate de tener 'import requests' en la Línea 1.")
+
+# --- FIN DEL BLOQUE ---
