@@ -54,8 +54,9 @@ botonera_html = """
 </div>
 
 <div style="display: flex; justify-content: center; gap: 10px;">
-  <button class="grey-button">CAFE</button>
-  <button class="grey-button">FIN</button>
+  • <button class="grey-button" id="btn-cafe">CAFE</button>
+• <button class="grey-button" id="btn-fin">FIN</button>
+
 </div>
 
 """
