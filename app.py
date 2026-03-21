@@ -1,61 +1,83 @@
 import streamlit as st
 
-st.set_page_config(layout="centered", page_title="Panel Trabajo")
+st.set_page_config(layout="centered", page_title="Panel Taxi")
 
-# Este es el estilo que funcionó para tener 2 columnas y colores en el iPhone
+# Estilo blindado para iPhone (Copia fiel de la imagen 19:35)
 st.markdown("""
     <style>
-    /* Forzar que las columnas no se apilen en el móvil */
-    [data-testid="column"] {
-        width: 48% !important;
-        flex: 1 1 45% !important;
-        min-width: 45% !important;
-    }
-    
-    /* Estilo general de los botones */
-    .stButton > button {
-        height: 140px !important;
-        width: 100% !important;
-        font-size: 22px !important;
-        font-weight: bold !important;
-        color: white !important;
-        border-radius: 15px !important;
-        margin-bottom: 10px !important;
-        border: none !important;
+    .block-container { padding: 10px 5px !important; }
+    header, footer { visibility: hidden; }
+
+    /* La rejilla mágica que no se rompe */
+    .grid-taxi {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        padding: 5px;
     }
 
-    /* Colores exactos de tu diseño */
-    /* Fila 1 */
-    div.stButton:nth-child(1) button { background-color: #0000FF !important; } /* PARADA - Azul */
-    div.stButton:nth-child(2) button { background-color: #008000 !important; } /* MANILLA - Verde */
-    
-    /* Fila 2 */
-    div.stButton:nth-child(3) button { background-color: #FFA500 !important; } /* EMISORA - Naranja */
-    div.stButton:nth-child(4) button { background-color: #808080 !important; } /* LIBRE - Gris */
+    /* Diseño de los botones grandes */
+    .btn {
+        height: 150px;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-family: sans-serif;
+        font-size: 22px;
+        font-weight: bold;
+        text-decoration: none;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    }
 
-    /* Botones pequeños de abajo */
-    .bot-row .stButton > button {
-        height: 60px !important;
-        font-size: 14px !important;
-        background-color: #333333 !important;
+    /* Colores exactos */
+    .azul { background-color: #0000FF; }
+    .verde { background-color: #38761d; }
+    .naranja { background-color: #f6b26b; }
+    .gris { background-color: #7f7f7f; }
+
+    /* Fila de abajo */
+    .grid-small {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 5px;
+        margin-top: 15px;
+        padding: 5px;
+    }
+    .btn-s {
+        height: 70px;
+        background-color: #333;
+        border-radius: 10px;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: bold;
+        text-decoration: none;
     }
     </style>
+
+    <div class="grid-taxi">
+        <a href="/?button=PARADA" class="btn azul">PARADA</a>
+        <a href="/?button=MANILLA" class="btn verde">MANILLA</a>
+        <a href="/?button=EMISORA" class="btn naranja">EMISORA</a>
+        <a href="/?button=LIBRE" class="btn gris">LIBRE</a>
+    </div>
+
+    <div class="grid-small">
+        <a href="/?button=FOTO" class="btn-s">FOTO</a>
+        <a href="/?button=MIC" class="btn-s">MIC</a>
+        <a href="/?button=CAFE" class="btn-s">CAFE</a>
+        <a href="/?button=FIN" class="btn-s">FIN</a>
+    </div>
     """, unsafe_allow_html=True)
 
-# Estructura de botones
-col1, col2 = st.columns(2)
-with col1:
-    st.button("PARADA")
-    st.button("EMISORA")
-
-with col2:
-    st.button("MANILLA")
-    st.button("LIBRE")
-
-st.markdown('<div class="bot-row">', unsafe_allow_html=True)
-c1, c2, c3, c4 = st.columns(4)
-with c1: st.button("FOTO")
-with c2: st.button("MIC")
-with c3: st.button("CAFE")
-with c4: st.button("FIN")
-st.markdown('</div>', unsafe_allow_html=True)
+# Lógica para detectar qué botón has pulsado
+query_params = st.query_params
+if "button" in query_params:
+    boton_pulsado = query_params["button"]
+    st.toast(f"✅ {boton_pulsado} registrado")
+    # Limpiar la URL para el próximo toque
+    st.query_params.clear()
