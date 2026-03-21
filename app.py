@@ -2,13 +2,13 @@ import streamlit as st
 
 st.set_page_config(layout="centered", page_title="Panel Taxi")
 
-# Estilo blindado para iPhone (Copia fiel de la imagen 19:35)
+# Diseño blindado para iPhone (Recuperando el estilo de las 19:35)
 st.markdown("""
     <style>
     .block-container { padding: 10px 5px !important; }
     header, footer { visibility: hidden; }
 
-    /* La rejilla mágica que no se rompe */
+    /* Forzar rejilla de 2 columnas que no se rompa en vertical */
     .grid-taxi {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -16,7 +16,7 @@ st.markdown("""
         padding: 5px;
     }
 
-    /* Diseño de los botones grandes */
+    /* Estilo de los botones grandes */
     .btn {
         height: 150px;
         border-radius: 15px;
@@ -29,15 +29,23 @@ st.markdown("""
         font-weight: bold;
         text-decoration: none;
         box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        transition: 0.1s;
     }
 
-    /* Colores exactos */
+    /* Colores exactos de tu captura buena */
     .azul { background-color: #0000FF; }
     .verde { background-color: #38761d; }
     .naranja { background-color: #f6b26b; }
     .gris { background-color: #7f7f7f; }
 
-    /* Fila de abajo */
+    /* Efecto al tocar */
+    .btn:active {
+        background-color: #00FF00 !important;
+        color: black;
+        transform: scale(0.95);
+    }
+
+    /* Rejilla de botones auxiliares abajo */
     .grid-small {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
@@ -74,10 +82,10 @@ st.markdown("""
     </div>
     """, unsafe_allow_html=True)
 
-# Lógica para detectar qué botón has pulsado
+# Lógica para registrar los clics sin usar botones nativos que rompan el CSS
 query_params = st.query_params
 if "button" in query_params:
     boton_pulsado = query_params["button"]
     st.toast(f"✅ {boton_pulsado} registrado")
-    # Limpiar la URL para el próximo toque
+    # Limpiamos para el siguiente toque
     st.query_params.clear()
