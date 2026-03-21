@@ -101,3 +101,29 @@ if st.checkbox("📷 Activar Cámara para el Informe"):
             except:
                 st.error("⚠️ Error de conexión.")
 # --- FIN DEL BLOQUE ---
+# --- LÍNEA 104: MOTOR DE ENVÍO DE FOTO ---
+st.divider()
+
+if st.checkbox("📷 Activar Cámara para el Informe"):
+    foto = st.camera_input("Captura de parada o incidencia")
+    
+    if foto:
+        if st.button("🚀 ENVIAR AHORA A GOOGLE SHEETS"):
+            try:
+                # Convertimos la imagen a bytes
+                bytes_data = foto.getvalue()
+                
+                # Tu URL de Make (Servidor EU1)
+                url_webhook = "https://hook.eu1.make.com/zBmH53wgdaq"
+                
+                # Enviamos el archivo
+                res = requests.post(url_webhook, files={"archivo": bytes_data})
+                
+                if res.status_code == 200:
+                    st.success("✅ ¡Recibido! Foto registrada en el sistema.")
+                else:
+                    st.error(f"❌ Error {res.status_code}: Revisa el escenario en Make.")
+            except Exception as e:
+                st.error(f"⚠️ Error: Asegúrate de tener 'import requests' al principio del archivo.")
+
+# --- FIN DEL MOTOR DE ENVÍO ---
