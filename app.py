@@ -53,10 +53,23 @@ botonera_html = """
     <a href="/?button=MANILLA" class="btn-taxi" style="background-color: #34495e;"><i class="fas fa-hand-paper"></i>MANILLA</a>
 </div>
 
-<div style="display: flex; justify-content: center; gap: 10px;">
-  <button class="grey-button">CAFE</button>
-  <button class="grey-button">FIN</button>
-</div>
+import requests
+
+# Pon tu URL de Make aquí una sola vez
+URL_MAKE = "https://hook.eu1.make.com/jgvj7anrmyxyu621vmpueo814k8wa1ue"
+
+col1, col2 = st.columns(2)
+
+with col1:
+    if st.button("CAFE"):
+        requests.post(URL_MAKE, json={"mensaje": "☕️ Inicio de pausa café"})
+        st.success("Aviso enviado")
+
+with col2:
+    if st.button("FIN"):
+        requests.post(URL_MAKE, json={"mensaje": "🏁 Fin de jornada"})
+        st.success("Turno finalizado")
+
 
 """
 
