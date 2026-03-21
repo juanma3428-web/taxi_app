@@ -80,3 +80,24 @@ if st.checkbox("📷 Abrir Cámara para Informe"):
         if st.button("Confirmar Envío"):
             # Aquí pondremos el enlace a tu Webhook de Make
             st.write("Enviando a Google Sheets...")
+# --- LÍNEA 83: COMIENZA EL BLOQUE DE SEGURIDAD PARA LA FOTO ---
+st.divider()
+
+if st.checkbox("📷 Activar Cámara para el Informe"):
+    foto = st.camera_input("Captura de parada o incidencia")
+    
+    if foto:
+        if st.button("🚀 ENVIAR FOTO A GOOGLE SHEETS"):
+            bytes_data = foto.getvalue()
+            # Sustituye las X por tu enlace de Make:
+            url_webhook = "https://hook.us1.make.com/XXXXXXXXXXXX"
+            
+            try:
+                res = requests.post(url_webhook, files={"file": bytes_data})
+                if res.status_code == 200:
+                    st.success("✅ Foto registrada en el Excel.")
+                else:
+                    st.error("❌ Error al subir la imagen.")
+            except:
+                st.error("⚠️ Error de conexión.")
+# --- FIN DEL BLOQUE ---
