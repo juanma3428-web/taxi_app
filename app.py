@@ -54,9 +54,9 @@ botonera_html = """
 </div>
 
 <div style="display: flex; justify-content: center; gap: 10px;">
-  <button class="grey-button">CAFE</button>
-  <button class="grey-button">FIN</button>
-</div>
+  <button class="grey-button" onclick="marcarEvento('☕️ Inicio de descanso')">CAFE</button>
+<button class="grey-button" onclick="marcarEvento('🏁 Fin de jornada')">FIN</button>
+
 
 """
 
@@ -98,4 +98,22 @@ with col2:
                         st.success("✅ Audio enviado")
                 except:
                     st.error("⚠️ Error")
+<script>
+function marcarEvento(texto) {
+    const urlMake = "https://hook.us1.make.com/TU_CODIGO_AQUI"; // <--- PEGA AQUÍ TU URL DE MAKE
+    
+    fetch(urlMake, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+            mensaje: texto,
+            tipo: "BOTON_RAPIDO" 
+        })
+    })
+    .then(() => {
+        alert("Enviado a Telegram: " + texto);
+    })
+    .catch(err => console.error("Error:", err));
+}
+</script>
 
