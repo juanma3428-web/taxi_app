@@ -60,6 +60,27 @@ botonera_html = """
 </div>
 
 """
+<script>
+// Función única para enviar avisos a Telegram
+function enviarAviso(mensaje) {
+    const urlMake = "TU_URL_DE_MAKE_AQUÍ"; // <--- PEGA AQUÍ TU URL DE SIEMPRE
+    
+    fetch(urlMake, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+            texto: mensaje,
+            tipo: "EVENTO_RAPIDO" 
+        })
+    })
+    .then(() => alert("Enviado: " + mensaje))
+    .catch(err => console.log("Error silencioso:", err));
+}
+
+// Conectamos los botones por su ID para no tocar el HTML original
+document.getElementById('btn-cafe').onclick = function() { enviarAviso('☕️ Inicio de pausa café'); };
+document.getElementById('btn-fin').onclick = function() { enviarAviso('🏁 Fin de jornada laboral'); };
+</script>
 
 st.write(botonera_html, unsafe_allow_html=True)
 
