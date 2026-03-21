@@ -55,23 +55,23 @@ botonera_html = """
 
 import requests
 
-# Pon tu URL de Make aquí una sola vez
+import requests
+
+# Conexión directa con tu Telegram
 URL_MAKE = "https://hook.eu1.make.com/jgvj7anrmyxyu621vmpueo814k8wa1ue"
 
-col1, col2 = st.columns(2)
+# Fila de botones centrados
+col_cafe, col_fin = st.columns(2)
 
-with col1:
-    if st.button("CAFE"):
-        requests.post(URL_MAKE, json={"mensaje": "☕️ Inicio de pausa café"})
-        st.success("Aviso enviado")
+with col_cafe:
+    if st.button("☕️ CAFE"):
+        requests.post(URL_MAKE, json={"evento": "CAFE", "msg": "Inicio de descanso"})
+        st.toast("Aviso de café enviado")
 
-with col2:
-    if st.button("FIN"):
-        requests.post(URL_MAKE, json={"mensaje": "🏁 Fin de jornada"})
-        st.success("Turno finalizado")
-
-
-"""
+with col_fin:
+    if st.button("🏁 FIN"):
+        requests.post(URL_MAKE, json={"evento": "FIN", "msg": "Fin de jornada"})
+        st.toast("Turno finalizado")
 
 st.write(botonera_html, unsafe_allow_html=True)
 
