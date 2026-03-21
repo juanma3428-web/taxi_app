@@ -69,29 +69,34 @@ if "button" in query_params:
     boton_pulsado = query_params["button"]
     st.info(f"Registrando: {boton_pulsado}...")
     # Aquí va tu link de Make que ya funcionaba
-# --- LÍNEA 70: CONEXIÓN REAL Y DEFINITIVA CON MAKE ---
+# --- LÍNEA 70: CÓDIGO ACTUALIZADO PARA EVITAR ERRORES DE DRIVE ---
 st.divider()
 
-if st.checkbox("📷 Activar Cámara para el Informe"):
-    foto = st.camera_input("Captura de parada o incidencia")
-    
-    if foto:
-        if st.button("🚀 ENVIAR AHORA"):
-            try:
-                # 1. Preparar la imagen
-                bytes_data = foto.getvalue()
-                
-                # 2. Tu URL de Webhook Nueva
-                url_webhook = "https://hook.eu1.make.com/jgvj7anrmyxyu621vmpueo814k8wa1ue"
-                
-                # 3. Enviar el archivo
-                res = requests.post(url_webhook, files={"archivo": bytes_data})
-                
-                if res.status_code == 200:
-                    st.success("✅ ¡CONECTADO! Foto enviada correctamente al sistema.")
-                else:
-                    st.error(f"❌ Error {res.status_code}: La dirección respondió, pero hubo un problema.")
-            except Exception as e:
-                st.error("⚠️ Error: Asegúrate de tener 'import requests' en la Línea 1.")
+col1, col2 = st.columns(2)
 
-# --- FIN DEL BLOQUE ---
+with col1:
+    if st.checkbox("📷 Cámara"):
+        foto = st.camera_input("Captura")
+        if foto:
+            if st.button("🚀 ENVIAR FOTO"):
+                try:
+                    res = requests.post("https://hook.eu1.make.com/jgvj7anrmyxyu621vmpueo814k8wa1ue", 
+                                      files={"archivo": foto.getvalue()})
+                    if res.status_code == 200:
+                        st.success("✅ Foto enviada")
+                except:
+                    st.error("⚠️ Error")
+
+with col2:
+    if st.checkbox("🎙️ Micro"):
+        audio = st.audio_input("Graba")
+        if audio:
+            if st.button("🚀 ENVIAR AUDIO"):
+                try:
+                    res = requests.post("https://hook.eu1.make.com/jgvj7anrmyxyu621vmpueo814k8wa1ue", 
+                                      files={"archivo": audio.getvalue()})
+                    if res.status_code == 200:
+                        st.success("✅ Audio enviado")
+                except:
+                    st.error("⚠️ Error")
+
