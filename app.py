@@ -67,3 +67,16 @@ if "button" in query_params:
     boton_pulsado = query_params["button"]
     st.info(f"Registrando: {boton_pulsado}...")
     # Aquí va tu link de Make que ya funcionaba
+# --- ZONA DE PRUEBAS SEGURA (Debajo de tu botonera) ---
+st.divider() # Esto crea una línea de separación visual
+
+# Creamos un interruptor para que la cámara no esté siempre encendida
+if st.checkbox("📷 Abrir Cámara para Informe"):
+    foto = st.camera_input("Haz una foto de la parada o incidencia")
+    
+    if foto:
+        # Aquí es donde Make recibirá la imagen
+        st.success("Foto capturada. ¿Quieres enviarla?")
+        if st.button("Confirmar Envío"):
+            # Aquí pondremos el enlace a tu Webhook de Make
+            st.write("Enviando a Google Sheets...")
