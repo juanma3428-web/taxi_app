@@ -1,7 +1,7 @@
 import streamlit as st
 import requests
 
-# 1. Configuración de Estilo (Diseño de la botonera superior)
+# 1. Configuración de Estilo y Conexión Directa con Atajos de iPhone
 st.markdown("""
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <style>
@@ -23,9 +23,12 @@ st.markdown("""
         border-radius: 15px;
         height: 100px;
         font-size: 16px;
+        transition: transform 0.1s;
+    }
+    .btn-taxi:active {
+        transform: scale(0.95);
     }
     .fas { margin-bottom: 5px; font-size: 24px; }
-    /* Estilo para los botones de Streamlit para que se vean mejor */
     .stButton>button {
         border-radius: 10px;
         height: 50px;
@@ -34,28 +37,26 @@ st.markdown("""
 </style>
 
 <div class="grid-container">
-    <a href="/?button=LIBRE" class="btn-taxi" style="background-color: #2ecc71;"><i class="fas fa-check"></i>LIBRE</a>
-    <a href="/?button=PARADA" class="btn-taxi" style="background-color: #e67e22;"><i class="fas fa-map-marker-alt"></i>PARADA</a>
-    <a href="/?button=EMISORA" class="btn-taxi" style="background-color: #e74c3c;"><i class="fas fa-headset"></i>EMISORA</a>
-    <a href="/?button=MANILLA" class="btn-taxi" style="background-color: #34495e;"><i class="fas fa-hand-paper"></i>MANILLA</a>
+    <a href="shortcuts://run-shortcut?name=LIBRE" class="btn-taxi" style="background-color: #2ecc71;">
+        <i class="fas fa-check"></i>LIBRE
+    </a>
+    <a href="shortcuts://run-shortcut?name=ENTRAR%20PARADA" class="btn-taxi" style="background-color: #e67e22;">
+        <i class="fas fa-map-marker-alt"></i>PARADA
+    </a>
+    <a href="shortcuts://run-shortcut?name=EMISORA" class="btn-taxi" style="background-color: #e74c3c;">
+        <i class="fas fa-headset"></i>EMISORA
+    </a>
+    <a href="shortcuts://run-shortcut?name=MANILLA" class="btn-taxi" style="background-color: #34495e;">
+        <i class="fas fa-hand-paper"></i>MANILLA
+    </a>
 </div>
 """, unsafe_allow_html=True)
 
-# 2. URL de tu Webhook de Make
+# 2. URL de tu Webhook de Make (Para funciones de sistema y archivos)
 URL_MAKE = "https://hook.eu1.make.com/jgvj7anrmyxyu621vmpueo814k8wa1ue"
 
-# 3. Lógica para los botones de colores (LIBRE, PARADA, etc.)
-query_params = st.query_params
-if "button" in query_params:
-    boton_pulsado = query_params["button"]
-    try:
-        requests.post(URL_MAKE, json={"evento": boton_pulsado, "detalle": "Cambio de estado"})
-        st.success(f"Registrado: {boton_pulsado}")
-    except:
-        st.error("Error al registrar estado")
-
-# 4. Botones CAFE y FIN (Funcionales y centrados)
-st.write("") # Espacio visual
+# 3. Botones CAFE y FIN (Siguen funcionando directo a Make)
+st.write("") 
 col_c, col_f = st.columns(2)
 
 with col_c:
@@ -76,7 +77,7 @@ with col_f:
 
 st.divider()
 
-# 5. Sistema de Cámara y Micro (Tu código original intacto)
+# 4. Sistema de Cámara y Micro
 col1, col2 = st.columns(2)
 
 with col1:
