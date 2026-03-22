@@ -37,16 +37,16 @@ st.markdown("""
 </style>
 
 <div class="grid-container">
-    <a href="shortcuts://run-shortcut?name=LIBRE" class="btn-taxi" style="background-color: #2ecc71;">
+    <a href="shortcuts://run-shortcut?name=LIBRE" target="_self" class="btn-taxi" style="background-color: #2ecc71;">
         <i class="fas fa-check"></i>LIBRE
     </a>
-    <a href="shortcuts://run-shortcut?name=ENTRAR%20PARADA" class="btn-taxi" style="background-color: #e67e22;">
+    <a href="shortcuts://run-shortcut?name=ENTRAR%20PARADA" target="_self" class="btn-taxi" style="background-color: #e67e22;">
         <i class="fas fa-map-marker-alt"></i>PARADA
     </a>
-    <a href="shortcuts://run-shortcut?name=EMISORA" class="btn-taxi" style="background-color: #e74c3c;">
+    <a href="shortcuts://run-shortcut?name=EMISORA" target="_self" class="btn-taxi" style="background-color: #e74c3c;">
         <i class="fas fa-headset"></i>EMISORA
     </a>
-    <a href="shortcuts://run-shortcut?name=MANILLA" class="btn-taxi" style="background-color: #34495e;">
+    <a href="shortcuts://run-shortcut?name=MANILLA" target="_self" class="btn-taxi" style="background-color: #34495e;">
         <i class="fas fa-hand-paper"></i>MANILLA
     </a>
 </div>
@@ -55,7 +55,7 @@ st.markdown("""
 # 2. URL de tu Webhook de Make (Para funciones de sistema y archivos)
 URL_MAKE = "https://hook.eu1.make.com/jgvj7anrmyxyu621vmpueo814k8wa1ue"
 
-# 3. Botones CAFE y FIN (Siguen funcionando directo a Make)
+# 3. Botones CAFE y FIN (Funcionan directo por internet)
 st.write("") 
 col_c, col_f = st.columns(2)
 
