@@ -1,105 +1,96 @@
 import streamlit as st
 import requests
+from streamlit_components_dot_com import html # Solo si usas componentes, si no, usamos st.components.v1
 
-# 1. Configuración de Estilo y Conexión Directa con Atajos de iPhone
-st.markdown("""
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+# 1. Configuración de Estilo y Script de GPS Directo
+st.set_page_config(page_title="Trabajo Taxi", layout="centered")
+
+# Script para capturar GPS y mandarlo a Make
+st.components.v1.html("""
+<script>
+    function enviarUbicacion(evento) {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                const lat = position.coords.latitude;
+                const lon = position.coords.longitude;
+                const url = "https://hook.eu1.make.com/jgvj7anrmyxyu621vmpueo814k8wa1ue";
+                
+                fetch(url, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        "evento": evento,
+                        "latitud": lat,
+                        "longitud": lon,
+                        "timestamp": new Date().toISOString()
+                    }),
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                alert(evento + " registrado con GPS ✅");
+            });
+        } else {
+            alert("El GPS no está disponible");
+        }
+    }
+</script>
+
 <style>
     .grid-container {
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-        padding: 10px;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
     }
     .btn-taxi {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-decoration: none;
+        border: none;
         color: white;
-        font-family: Arial, sans-serif;
+        padding: 25px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 18px;
         font-weight: bold;
         border-radius: 15px;
-        height: 100px;
-        font-size: 16px;
-        transition: transform 0.1s;
-    }
-    .btn-taxi:active {
-        transform: scale(0.95);
-    }
-    .fas { margin-bottom: 5px; font-size: 24px; }
-    .stButton>button {
-        border-radius: 10px;
-        height: 50px;
-        font-weight: bold;
+        cursor: pointer;
+        width: 100%;
     }
 </style>
 
 <div class="grid-container">
-    <a href="shortcuts://run-shortcut?name=LIBRE" target="_self" class="btn-taxi" style="background-color: #2ecc71;">
-        <i class="fas fa-check"></i>LIBRE
-    </a>
-    <a href="shortcuts://run-shortcut?name=ENTRAR%20PARADA" target="_self" class="btn-taxi" style="background-color: #e67e22;">
-        <i class="fas fa-map-marker-alt"></i>PARADA
-    </a>
-    <a href="shortcuts://run-shortcut?name=EMISORA" target="_self" class="btn-taxi" style="background-color: #e74c3c;">
-        <i class="fas fa-headset"></i>EMISORA
-    </a>
-    <a href="shortcuts://run-shortcut?name=MANILLA" target="_self" class="btn-taxi" style="background-color: #34495e;">
-        <i class="fas fa-hand-paper"></i>MANILLA
-    </a>
+    <button class="btn-taxi" style="background-color: #2ecc71;" onclick="enviarUbicacion('LIBRE')">LIBRE</button>
+    <button class="btn-taxi" style="background-color: #e67e22;" onclick="enviarUbicacion('PARADA')">PARADA</button>
+    <button class="btn-taxi" style="background-color: #e74c3c;" onclick="enviarUbicacion('EMISORA')">EMISORA</button>
+    <button class="btn-taxi" style="background-color: #34495e;" onclick="enviarUbicacion('MANILLA')">MANILLA</button>
 </div>
-""", unsafe_allow_html=True)
+""", height=250)
 
-# 2. URL de tu Webhook de Make (Para funciones de sistema y archivos)
+# 2. Botones CAFE y FIN (Directos a Make)
 URL_MAKE = "https://hook.eu1.make.com/jgvj7anrmyxyu621vmpueo814k8wa1ue"
 
-# 3. Botones CAFE y FIN (Funcionan directo por internet)
 st.write("") 
 col_c, col_f = st.columns(2)
-
 with col_c:
     if st.button("☕️ CAFE", use_container_width=True):
-        try:
-            requests.post(URL_MAKE, json={"evento": "CAFE", "mensaje": "Inicio de pausa café"})
-            st.toast("Aviso de CAFÉ enviado ✅")
-        except:
-            st.error("Error al enviar")
+        requests.post(URL_MAKE, json={"evento": "CAFE"})
+        st.toast("Café registrado")
 
 with col_f:
     if st.button("🏁 FIN", use_container_width=True):
-        try:
-            requests.post(URL_MAKE, json={"evento": "FIN", "mensaje": "Fin de jornada"})
-            st.toast("Aviso de FIN enviado ✅")
-        except:
-            st.error("Error al enviar")
+        requests.post(URL_MAKE, json={"evento": "FIN"})
+        st.toast("Jornada finalizada")
 
 st.divider()
 
-# 4. Sistema de Cámara y Micro
+# 3. Cámara y Micro (Tus funciones que ya funcionan)
 col1, col2 = st.columns(2)
-
 with col1:
     if st.checkbox("📷 Cámara"):
-        foto = st.camera_input("Captura")
-        if foto:
-            if st.button("🚀 ENVIAR FOTO"):
-                try:
-                    res = requests.post(URL_MAKE, files={"archivo": foto.getvalue()})
-                    if res.status_code == 200:
-                        st.success("✅ Foto enviada")
-                except:
-                    st.error("⚠️ Error")
+        foto = st.camera_input("Foto")
+        if foto and st.button("🚀 ENVIAR FOTO"):
+            requests.post(URL_MAKE, files={"archivo": foto.getvalue()})
+            st.success("Foto enviada")
 
 with col2:
     if st.checkbox("🎙️ Micro"):
-        audio = st.audio_input("Graba")
-        if audio:
-            if st.button("🚀 ENVIAR AUDIO"):
-                try:
-                    res = requests.post(URL_MAKE, files={"archivo": audio.getvalue()})
-                    if res.status_code == 200:
-                        st.success("✅ Audio enviado")
-                except:
-                    st.error("⚠️ Error")
+        audio = st.audio_input("Audio")
+        if audio and st.button("🚀 ENVIAR AUDIO"):
+            requests.post(URL_MAKE, files={"archivo": audio.getvalue()})
+            st.success("Audio enviado")
